@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes, Link } from 'react-router-dom';
 import Home from './Home';
 import Users from './Users';
@@ -7,6 +7,13 @@ import SignIn from './SignIn';
 import Profile from './Profile';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check if an user is already logged in
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token)
+  }, []);
 
   return (
     <div>
@@ -14,9 +21,17 @@ function App() {
         <ul>
           <li><Link to="/">Home</Link></li>
           <li><Link to="/users">Users</Link></li>
-          <li><Link to="/login">Login</Link></li>
-          <li><Link to="/signup">Sign Up</Link></li>
-          <li><Link to="/profile">Profile</Link></li>
+          {!isAuthenticated && (
+            <>
+              <li><Link to="/login">Login</Link></li>
+              <li><Link to="/signup">Sign Up</Link></li>
+            </>
+          )}
+          {isAuthenticated && (
+            <>
+              <li><Link to="/profile">Profile</Link></li>
+            </>
+          )}
         </ul>
       </nav>
 
