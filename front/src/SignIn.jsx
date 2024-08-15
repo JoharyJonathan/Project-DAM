@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function SignIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -22,6 +24,9 @@ function SignIn() {
             console.log('Login succesfull');
             console.log(response.data.user);
             console.log('Response after user:',response.data);
+
+            // Redirect to profile page after successful login
+            navigate('/profile');
         } catch (error) {
             console.log('There was an error logging in!', error);
         }
