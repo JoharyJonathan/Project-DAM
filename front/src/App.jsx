@@ -1,37 +1,34 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react';
+import { Route, Routes, Link } from 'react-router-dom';
+import Home from './Home';
+import Users from './Users';
+import SignUp from './SignUp';
+import SignIn from './SignIn';
+import Profile from './Profile';
 
 function App() {
-  const [data, setData] = useState([])
-
-  useEffect(() => {
-    fetch('http://localhost:8080/users')
-    .then(res => res.json())
-    .then(data => setData(data))
-    .catch(err => console.log(err));
-  }, [])
 
   return (
     <div>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>name</th>
-            <th>email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((d, i) => (
-            <tr key={i}>
-              <td>{d.user_id}</td>
-              <td>{d.name}</td>
-              <td>{d.email}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <nav>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/users">Users</Link></li>
+          <li><Link to="/login">Login</Link></li>
+          <li><Link to="/signup">Sign Up</Link></li>
+          <li><Link to="/profile">Profile</Link></li>
+        </ul>
+      </nav>
+
+      <Routes>
+        <Route path='/' element={<Home />}/>
+        <Route path='/users' element={<Users />}/>
+        <Route path='/login' element={<SignIn />}/>
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='/profile' element={<Profile />} />
+      </Routes>
     </div>
-  )
+  );
 }
 
 export default App
