@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -21,9 +21,9 @@ function SignIn() {
             // Store JWT token and user info in local storage 
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
-            console.log('Login succesfull');
-            console.log(response.data.user);
-            console.log('Response after user:',response.data);
+            // console.log('Login succesfull');
+            // console.log(response.data.user);
+            // console.log('Response after user:',response.data);
 
             // Redirect to profile page after successful login
             navigate('/profile');
