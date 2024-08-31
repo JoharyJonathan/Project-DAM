@@ -5,6 +5,7 @@ const mysql = require("mysql");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require('dotenv').config();
 const corsOptions = {
     origin: ["http://localhost:5173"],
 };
@@ -86,7 +87,7 @@ app.post("/login", (req, res) => {
 
         // Create a JWT token
         const token = jwt.sign({
-            user_id: user.user_id,  // Utilisez 'user_id' au lieu de 'id'
+            user_id: user.user_id,
             email: user.email,
             name: user.name,
             role_id: user.role_id,
@@ -99,7 +100,7 @@ app.post("/login", (req, res) => {
             message: 'Login successful',
             token,
             user: {
-                id: user.user_id,  // Utilisez 'user_id' au lieu de 'id'
+                id: user.user_id,
                 name: user.name,
                 email: user.email,
                 role_id: user.role_id,
@@ -127,7 +128,7 @@ function authenticateToken(req, res, next) {
 }
 
 app.get("/users/profile", authenticateToken, (req, res) => {
-    const userId = req.user.user_id;  // Utilisez 'user_id' au lieu de 'id'
+    const userId = req.user.user_id;
 
     const query = `SELECT user_id, name, email, role_id, profile_picture FROM users WHERE user_id = ?`;
     db.query(query, [userId], (err, results) => {
@@ -143,7 +144,7 @@ app.get("/users/profile", authenticateToken, (req, res) => {
         const user = results[0];
         res.json({
             user: {
-                id: user.user_id,  // Utilisez 'user_id' au lieu de 'id'
+                id: user.user_id,
                 name: user.name,
                 email: user.email,
                 role_id: user.role_id,
@@ -190,6 +191,33 @@ app.put("/users/profile", authenticateToken, upload.single('profile_picture'), (
                 }
             });
         });
+    });
+});
+
+// aministrator side
+
+// admin signup
+app.post("/admin/signup", (req, res) => {
+    const { name, email, password, secretKey } = req.body;
+
+    // verify SECRET_KEY
+    if (secretKey !== process.env.SECRET_KEY) {
+        return res.status(403).json({ error: 'Forbidden' });
+    }
+
+    console.log('Received SecretKey:', secretKey);
+    console.log('Expected SecretKey:', process.env.SECRET_KEY);
+
+    // Crypt password
+    const hashedPassword = bcrypt.hashSync(password, 10);
+
+    const query = `INSERT INTO admin_users (name, email, password, role_id) VALUES (?, ?, ?, ?)`;
+    db.query(query, [name, email, hashedPassword, 2], (err, result) => {
+        if (err) {
+            console.error('Error inserting admin:', err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        res.status(201).json({ message: 'Admin registered successfully!' });
     });
 });
 

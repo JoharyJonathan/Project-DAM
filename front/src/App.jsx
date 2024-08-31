@@ -7,6 +7,7 @@ import SignIn from './SignIn';
 import Profile from './Profile';
 import LogoutButton from './LogoutButton';
 import UpdateProfile from './UpdateProfile';
+import AdminSignup from './AdminSignup';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -27,6 +28,7 @@ function App() {
             <>
               <li><Link to="/login">Login</Link></li>
               <li><Link to="/signup">Sign Up</Link></li>
+              <li><Link to="/adminSignup">Admin Sign Up</Link></li>
             </>
           )}
           {isAuthenticated && (
@@ -47,6 +49,7 @@ function App() {
         <Route path='/profile' element={<Profile />} />
         <Route path='/updateProfile' element={<UpdateProfile />} />
         <Route path='/logOut' element={<LogoutButton />} />
+        <Route path='/adminSignup' element={<AdminSignup />}/>
       </Routes>
     </div>
   );
